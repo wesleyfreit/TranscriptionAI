@@ -1,0 +1,27 @@
+{
+  "name": "@transcription-ai/api",
+  "version": "1.0.0",
+  "private": true,
+  "main": "index.js",
+  "author": "wesley_freit",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "dev": "nodemon src/index.ts",
+    "build": "tsup src",
+    "start": "node dist/index.js",
+    "lint": "eslint src --fix"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@types/node": "^20",
+    "eslint": "^8",
+    "nodemon": "^3.0.2",
+    "ts-node": "^10.9.2",
+    "tsup": "^8.0.1",
+    "typescript": "^5.3.3"
+  }
+}
