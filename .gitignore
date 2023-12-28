@@ -41,6 +41,9 @@ build/Release
 # Dependency directories
 node_modules/
 jspm_packages/
+.pnp/
+.pnp.js
+.yarn/install-state.gz
 
 # Snowpack dependency directory (https://snowpack.dev/)
 web_modules/
@@ -87,6 +90,16 @@ web_modules/
 .next
 out
 
+# local env files
+.env*.local
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
 # Nuxt.js build / generate output
 .nuxt
 dist
@@ -125,3 +138,7 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# turbo
+
+.turbo/

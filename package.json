@@ -1,0 +1,23 @@
+{
+  "name": "transcription-ai",
+  "version": "1.0.0",
+  "private": true,
+  "author": "wesley_freit",
+  "license": "MIT",
+  "packageManager": "pnpm@8.9.0",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "clean": "turbo run clean",
+    "lint-staged": "lint-staged",
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "husky": "^8.0.3",
+    "lint-staged": "^15.2.0",
+    "turbo": "latest"
+  }
+}
