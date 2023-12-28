@@ -21,7 +21,7 @@ importers:
         specifier: ^15.2.0
         version: 15.2.0
       prettier:
-        specifier: ^3.1.0
+        specifier: ^3.1.1
         version: 3.1.1
       turbo:
         specifier: latest
@@ -36,10 +36,10 @@ importers:
         specifier: workspace:*
         version: link:../../packages/typescript-config
       '@types/node':
-        specifier: ^20
+        specifier: ^20.10.5
         version: 20.10.5
       eslint:
-        specifier: ^8
+        specifier: ^8.56.0
         version: 8.56.0
       nodemon:
         specifier: ^3.0.2
@@ -60,10 +60,10 @@ importers:
         specifier: 14.0.4
         version: 14.0.4(react-dom@18.2.0)(react@18.2.0)
       react:
-        specifier: ^18
+        specifier: ^18.2.0
         version: 18.2.0
       react-dom:
-        specifier: ^18
+        specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
     devDependencies:
       '@repo/eslint-config':
@@ -73,28 +73,28 @@ importers:
         specifier: workspace:*
         version: link:../../packages/typescript-config
       '@types/node':
-        specifier: ^20
+        specifier: ^20.10.5
         version: 20.10.5
       '@types/react':
-        specifier: ^18
+        specifier: ^18.2.45
         version: 18.2.45
       '@types/react-dom':
-        specifier: ^18
+        specifier: ^18.2.18
         version: 18.2.18
       autoprefixer:
-        specifier: ^10.0.1
+        specifier: ^10.4.16
         version: 10.4.16(postcss@8.4.32)
       eslint:
-        specifier: ^8
+        specifier: ^8.56.0
         version: 8.56.0
       postcss:
-        specifier: ^8
+        specifier: ^8.4.32
         version: 8.4.32
       tailwindcss:
-        specifier: ^3.3.0
+        specifier: ^3.4.0
         version: 3.4.0
       typescript:
-        specifier: ^5
+        specifier: ^5.3.3
         version: 5.3.3
 
   packages/eslint-config:
