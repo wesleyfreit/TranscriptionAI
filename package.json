@@ -11,11 +11,16 @@
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
+    "lint": "turbo lint",
     "clean": "turbo run clean",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "lint-staged": "lint-staged",
     "prepare": "husky install"
   },
   "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "prettier": "^3.1.0",
     "husky": "^8.0.3",
     "lint-staged": "^15.2.0",
     "turbo": "latest"
