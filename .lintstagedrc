@@ -1,3 +1,4 @@
 {
-  "*.ts": ["pnpm run lint", "npm run format"]
+  "**/*.{ts,tsx}": ["eslint --fix"],
+  "**/*.{ts,tsx,css}": ["prettier --check --write"]
 }

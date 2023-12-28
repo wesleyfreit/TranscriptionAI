@@ -16,5 +16,5 @@
   },
   "plugins": ["@typescript-eslint", "prettier"],
   "rules": {},
-  "ignorePatterns": [".config.*", "node_modules/", "dist/"]
+  "ignorePatterns": ["*.config.*", "node_modules/", "dist/"]
 }
