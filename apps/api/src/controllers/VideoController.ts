@@ -4,6 +4,7 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 import { randomUUID } from 'node:crypto';
 import { buffer } from 'node:stream/consumers';
 
+import { basename, extname } from 'node:path';
 import { getPreSignedUrl } from '../lib/getPreSignedUrl';
 import { Video } from '../models/Video';
 
@@ -40,8 +41,10 @@ export class VideoController {
       if (uploadToR2Response.statusText !== 'OK')
         return reply.status(400).send({ error: 'Failed to upload file' });
 
-      const fileUploadedUrl = this.domainUrl.concat(filename);
-      const videoCreated = this.video.createVideo(filename, fileUploadedUrl);
+      const extension = extname(filename);
+      const fileBaseName = basename(filename, extension);
+
+      const videoCreated = this.video.createVideo(fileBaseName, filename);
 
       return videoCreated;
     } catch (error) {
