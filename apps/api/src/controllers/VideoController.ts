@@ -24,7 +24,7 @@ export class VideoController {
 
       const { file, filename, mimetype } = data;
 
-      if (mimetype !== 'audio/mp3')
+      if (mimetype !== 'audio/mpeg')
         return reply.status(400).send({ error: 'Invalid file type' });
 
       const fileUploadName = randomUUID().concat(`-${filename}`);
