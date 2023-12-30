@@ -4,6 +4,7 @@ import { fastify } from 'fastify';
 import cors from '@fastify/cors';
 
 import { promptRoutes } from './routers/promptRoutes';
+import { videoRoutes } from './routers/videoRoutes';
 
 const app = fastify();
 const port = (process.env.PORT as unknown as number) || 3333;
@@ -19,6 +20,7 @@ app.register(cors, {
 });
 
 app.register(promptRoutes);
+app.register(videoRoutes);
 
 app.get('/', () => {
   return 'hello world!';
