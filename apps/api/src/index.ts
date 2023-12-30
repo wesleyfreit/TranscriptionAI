@@ -1,10 +1,22 @@
+import { fastifyMultipart } from '@fastify/multipart';
 import 'dotenv/config';
 import { fastify } from 'fastify';
+import cors from '@fastify/cors';
 
 import { promptRoutes } from './routers/promptRoutes';
 
 const app = fastify();
 const port = (process.env.PORT as unknown as number) || 3333;
+
+app.register(fastifyMultipart, {
+  limits: {
+    fileSize: 1_048_576 * 25, // 25mb
+  },
+});
+
+app.register(cors, {
+  origin: true,
+});
 
 app.register(promptRoutes);
 
