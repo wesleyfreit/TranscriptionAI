@@ -13,4 +13,17 @@ export class Video {
     const video = this.video.create({ data: { name: fileName, path: r2Url } });
     return video;
   };
+
+  createTranscription = async (videoId: string, transcription: string) => {
+    const video = this.video.update({
+      where: { id: videoId },
+      data: { transcription },
+    });
+    return video;
+  };
+
+  findVideo = async (videoId: string) => {
+    const video = this.video.findUniqueOrThrow({ where: { id: videoId } });
+    return video;
+  };
 }

@@ -1,14 +1,14 @@
+import cors from '@fastify/cors';
 import { fastifyMultipart } from '@fastify/multipart';
 import 'dotenv/config';
 import { fastify } from 'fastify';
-import cors from '@fastify/cors';
 
 import { promptRoutes } from './routers/promptRoutes';
 import { videoRoutes } from './routers/videoRoutes';
 
 const app = fastify();
 const port = parseInt(process.env.PORT ?? '3333');
-const origin = process.env.ORIGIN;
+const origin = process.env.ORIGIN_URL;
 
 app.register(fastifyMultipart, {
   limits: {
