@@ -1,10 +1,11 @@
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import axios from 'axios';
 import { FastifyReply, FastifyRequest } from 'fastify';
 
 import { randomUUID } from 'node:crypto';
-import { buffer } from 'node:stream/consumers';
-
 import { basename, extname } from 'node:path';
+
+import { capitalizeFirstLetter } from '../lib/capitalizeFirstLetter';
 import { getPreSignedUrl } from '../lib/getPreSignedUrl';
 import { Video } from '../models/Video';
 
@@ -21,16 +22,17 @@ export class VideoController {
 
       if (!data) return reply.status(400).send({ error: 'Missing file input' });
 
-      const { file, filename, mimetype } = data;
+      const { filename, mimetype } = data;
 
       if (mimetype !== 'audio/mpeg')
         return reply.status(400).send({ error: 'Invalid file type' });
 
-      const fileUploadName = randomUUID().concat(`-${filename}`);
+      const fileUploadName = randomUUID().concat(`_${filename.replace(/ /g, '_')}`);
       const preSignedUrl = await getPreSignedUrl(fileUploadName);
-      const fileToUpload = await buffer(file);
 
-      const uploadToR2Response = await axios.put(preSignedUrl, fileToUpload, {
+      const file = await data.toBuffer();
+
+      const uploadToR2Response = await axios.put(preSignedUrl, file, {
         headers: {
           'Content-Type': mimetype,
         },
@@ -42,10 +44,13 @@ export class VideoController {
       const extension = extname(filename);
       const fileBaseName = basename(filename, extension);
 
-      const videoCreated = this.video.createVideo(fileBaseName, filename);
+      const videoCreated = await this.video.createVideo(fileBaseName, fileUploadName);
 
       return videoCreated;
     } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError)
+        return reply.status(500).send({ error: capitalizeFirstLetter(error.message) });
+
       return reply.status(500).send({ error: 'Internal Server Error' });
     }
   };
