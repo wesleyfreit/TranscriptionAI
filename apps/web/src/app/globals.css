@@ -2,6 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(44, 52, 68, 0.4);
+}
+
+*::-webkit-scrollbar {
+  width: 7px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgb(44, 52, 68, 0.4);
+  border-radius: 20px;
+}
+
+.transcription-menu:hover {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(44, 52, 68);
+}
+
+.transcription-menu:hover::-webkit-scrollbar-thumb {
+  background-color: rgb(44, 52, 68);
+}
+
 @layer base {
   :root {
     --background: 224 71.4% 4.1%;
