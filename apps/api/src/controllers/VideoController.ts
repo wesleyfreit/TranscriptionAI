@@ -10,11 +10,9 @@ import { Video } from '../models/Video';
 
 export class VideoController {
   private video;
-  private domainUrl;
 
   constructor() {
     this.video = new Video();
-    this.domainUrl = process.env.DOMAIN_URL as string;
   }
 
   uploadAndCreate = async (request: FastifyRequest, reply: FastifyReply) => {
