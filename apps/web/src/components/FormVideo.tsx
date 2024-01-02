@@ -2,24 +2,14 @@
 import { CheckCircle, FileVideo, Upload, XCircle } from 'lucide-react';
 import { ChangeEvent, FormEvent, useMemo, useRef, useState } from 'react';
 
-import { api } from '@/libs/axios';
+import { Spinner } from '@/components/Spinner';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
+import { Textarea } from '@/components/ui/textarea';
+import { generateTranscription, uploadVideo } from '@/services/videos';
 import { convertMp3toMp4 } from '@/utils/convertMp3ToMp4';
-import { Spinner } from './Spinner';
-import { Button } from './ui/button';
-import { Label } from './ui/label';
-import { Separator } from './ui/separator';
-import { Textarea } from './ui/textarea';
-
-type Status = 'waiting' | 'converting' | 'uploading' | 'generating' | 'success' | 'error';
-
-const statusMessages = {
-  waiting: 'Carregar vídeo',
-  converting: 'Convertendo vídeo...',
-  uploading: 'Carregando aúdio...',
-  generating: 'Transcrevendo áudio...',
-  success: 'Sucesso!',
-  error: 'Ocorreu um erro, tente novamente',
-};
+import { formVideoStatusMessages } from '@/utils/formVideoStatusMessages';
 
 export const FormVideo = () => {
   const [video, setVideo] = useState<File | undefined>();
@@ -64,19 +54,13 @@ export const FormVideo = () => {
       const uploadData = new FormData();
       uploadData.set('file', audioFile);
 
-      const uploadResponse = await api.post('/videos', uploadData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      const uploadResponse = await uploadVideo(uploadData);
 
       const videoId = uploadResponse.data;
 
       setStatus('generating');
 
-      const generateResponse = await api.post(`/videos/${videoId}/transcription`, {
-        prompt: transcriptionPrompt,
-      });
+      const generateResponse = await generateTranscription(videoId, transcriptionPrompt);
 
       if (generateResponse.status === 200) {
         setStatus('success');
@@ -142,22 +126,22 @@ export const FormVideo = () => {
       >
         {status === 'waiting' ? (
           <>
-            {statusMessages.waiting}
+            {formVideoStatusMessages.waiting}
             <Upload className="w-4 h-4 ml-2" />
           </>
         ) : status === 'success' ? (
           <>
-            {statusMessages.success}
+            {formVideoStatusMessages.success}
             <CheckCircle className="w-4 h-4 ml-2" />
           </>
         ) : status === 'error' ? (
           <>
-            {statusMessages.error}
+            {formVideoStatusMessages.error}
             <XCircle className="w-4 h-4 ml-2" />
           </>
         ) : (
           <>
-            {statusMessages[status]}
+            {formVideoStatusMessages[status]}
             <Spinner />
           </>
         )}

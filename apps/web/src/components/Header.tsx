@@ -1,7 +1,7 @@
 import { Github } from 'lucide-react';
 
-import { Button } from './ui/button';
-import { Separator } from './ui/separator';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
 
 export const Header = () => {
   return (
