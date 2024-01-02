@@ -1,4 +1,4 @@
-import { getFFmpeg } from '@/lib/ffmpeg';
+import { getFFmpeg } from '@/libs/ffmpeg';
 import { fetchFile } from '@ffmpeg/util';
 
 export const convertMp3toMp4 = async (video: File) => {
