@@ -68,7 +68,7 @@ export class VideoController {
   setTranscription = async (request: FastifyRequest, reply: FastifyReply) => {
     try {
       const { id } = paramsSchema.parse(request.params);
-      const { prompt, temperature } = transcriptionSchema.parse(request.body);
+      const { prompt } = transcriptionSchema.parse(request.body);
 
       const video = await this.video.findVideo(id);
       const audioUrl = `${this.downloadUrl?.concat(video.path)}`;
@@ -88,7 +88,7 @@ export class VideoController {
       });
       formData.append('language', 'pt');
       formData.append('response_format', 'json');
-      formData.append('temperature', temperature);
+      formData.append('temperature', '0');
       formData.append('prompt', prompt);
 
       const transcriptionResponse = await axios.post(
