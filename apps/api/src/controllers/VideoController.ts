@@ -1,5 +1,5 @@
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
-import axios from 'axios';
+import axios, { isAxiosError } from 'axios';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import FormData from 'form-data';
 import { ZodError } from 'zod';
@@ -56,7 +56,7 @@ export class VideoController {
 
       const videoCreated = await this.video.createVideo(fileBaseName, fileDownloadUrl);
 
-      return videoCreated;
+      return videoCreated.id;
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError)
         return reply.status(500).send({ error: capitalizeFirstLetter(error.message) });
@@ -83,7 +83,7 @@ export class VideoController {
       const formData = new FormData();
       formData.append('model', 'whisper-1');
       formData.append('file', audioStream, {
-        filename: video.name,
+        filename: 'input.mp3',
         contentType: 'audio/mpeg',
       });
       formData.append('language', 'pt');
@@ -108,6 +108,12 @@ export class VideoController {
 
       return transcription;
     } catch (error) {
+      if (isAxiosError(error)) {
+        const responseError = error?.response;
+        return reply
+          .status(responseError?.status || 400)
+          .send({ error: responseError?.data.error.message.split('.')[0] });
+      }
       if (error instanceof ZodError) {
         const validationError = getValidationError(error.errors);
         return reply.status(400).send({ error: validationError });
