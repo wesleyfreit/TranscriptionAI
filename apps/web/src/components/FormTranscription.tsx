@@ -1,52 +1,47 @@
+'use client';
 import { Wand2 } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
-import { Button } from './ui/button';
-import { Label } from './ui/label';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from './ui/select';
-import { Separator } from './ui/separator';
-import { Slider } from './ui/slider';
+import { SelectItems } from '@/components/SelectItems';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
+import { Slider } from '@/components/ui/slider';
+import { PromptDTO } from '@/dtos/PromptDTO';
+import { getPrompts } from '@/services/prompts';
 
 export const FormTranscription = () => {
+  const [prompts, setPrompts] = useState<PromptDTO[]>([] as PromptDTO[]);
+  const [temperature, setTemperature] = useState(0.5);
+
+  useEffect(() => {
+    fechPrompts();
+  }, []);
+
+  const fechPrompts = async () => {
+    const promptsResponse = await getPrompts();
+    setPrompts(promptsResponse.data);
+  };
+
+  const onPromptSelect = (template: string) => {
+    console.log(template);
+  };
+
   return (
     <form className="space-y-5">
-      <div className="space-y-2">
-        <Label>Prompt</Label>
-
-        <Select>
-          <SelectTrigger>
-            <SelectValue placeholder="Selecione um prompt..." />
-          </SelectTrigger>
-
-          <SelectContent>
-            <SelectItem value="title" className="cursor-pointer">
-              Título do Youtube
-            </SelectItem>
-            <SelectItem value="description" className="cursor-pointer">
-              Descrição do Youtube
-            </SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+      <SelectItems
+        label="Prompt"
+        placeholder="Selecione um prompt..."
+        array={prompts}
+        onSelect={onPromptSelect}
+      />
 
       <div className="space-y-2">
-        <Label>Modelo</Label>
-
-        <Select defaultValue="gpt3.5" disabled>
-          <SelectTrigger>
-            <SelectValue />
-          </SelectTrigger>
-
-          <SelectContent>
-            <SelectItem value="gpt3.5">GPT 3.5-turbo 16k</SelectItem>
-          </SelectContent>
-        </Select>
-
+        <SelectItems
+          label="Modelo"
+          defaultValue="gpt3.5"
+          defaultText="GPT 3.5-turbo 16k"
+        />
         <span className="block italic text-xs text-muted-foreground">
           Você poderá customizar essa opção em breve
         </span>
@@ -57,7 +52,13 @@ export const FormTranscription = () => {
       <div className="space-y-4">
         <Label>Temperatura</Label>
 
-        <Slider min={0} max={1} step={0.1}>
+        <Slider
+          min={0}
+          max={1}
+          step={0.1}
+          value={[temperature]}
+          onValueChange={(value) => setTemperature(value[0] as number)}
+        >
           <Slider />
         </Slider>
 
