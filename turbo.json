@@ -1,10 +1,11 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "globalEnv": [
-    "PORT",
-    "ORIGIN_URL",
-    "DOWNLOAD_URL",
     "AI_KEY",
+    "NEXT_PUBLIC_API_URL",
+    "DOWNLOAD_URL",
+    "ORIGIN_URL",
+    "PORT",
     "R2_ACCOUNT_ID",
     "R2_ACCESS_KEY_ID",
     "R2_SECRET_ACCESS_KEY",
