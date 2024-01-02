@@ -6,9 +6,10 @@ export const convertMp3toMp4 = async (video: File) => {
 
   await ffmpeg.writeFile('input.mp4', await fetchFile(video));
 
-  ffmpeg.on('progress', (progress) => {
-    console.log('Convert progress: ' + Math.round(progress.progress * 100));
-  });
+  // See conversion progress
+  // ffmpeg.on('progress', (progress) => {
+  //   console.log('Convert progress: ' + Math.round(progress.progress * 100));
+  // });
 
   await ffmpeg.exec([
     '-i',

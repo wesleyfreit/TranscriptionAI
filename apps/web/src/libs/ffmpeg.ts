@@ -17,7 +17,9 @@ export async function getFFmpeg(): Promise<FFmpeg> {
         wasmURL: await toBlobURL(`${baseURL}/ffmpeg-core.wasm`, 'application/wasm'),
       });
     } catch (error) {
-      console.error(error);
+      alert(
+        'Ocorreu um erro, tente recarregar a página, e se o erro persistir tente novamente mais tarde.',
+      );
     }
   }
 
