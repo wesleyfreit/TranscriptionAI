@@ -5,4 +5,5 @@ const promptController = new PromptController();
 
 export const promptRoutes = async (app: FastifyInstance) => {
   app.get('/prompts', promptController.findAll);
+  app.post('/prompts', promptController.generateAiComplete);
 };
