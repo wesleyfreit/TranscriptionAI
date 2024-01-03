@@ -1,6 +1,6 @@
 'use client';
 import { Wand2 } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 
 import { SelectItems } from '@/components/SelectItems';
 import { Button } from '@/components/ui/button';
@@ -10,9 +10,22 @@ import { Slider } from '@/components/ui/slider';
 import { PromptDTO } from '@/dtos/PromptDTO';
 import { getPrompts } from '@/services/prompts';
 
-export const FormTranscription = () => {
+interface FormTranscriptionProps {
+  temperature: number;
+  isLoading: boolean;
+  onPromptSelect(template: string): void;
+  onTemperatureSelect(temperature: number): void;
+  onSubmit: (event: FormEvent<HTMLFormElement>) => void;
+}
+
+export const FormTranscription = ({
+  temperature,
+  isLoading,
+  onPromptSelect,
+  onTemperatureSelect,
+  onSubmit,
+}: FormTranscriptionProps) => {
   const [prompts, setPrompts] = useState<PromptDTO[]>([] as PromptDTO[]);
-  const [temperature, setTemperature] = useState(0.5);
 
   useEffect(() => {
     fechPrompts();
@@ -23,17 +36,21 @@ export const FormTranscription = () => {
     setPrompts(promptsResponse.data);
   };
 
-  const onPromptSelect = (template: string) => {
-    console.log(template);
+  const handlePromptSelect = (template: string) => {
+    onPromptSelect(template);
+  };
+
+  const handleTemperatureSelect = (value: number[]) => {
+    onTemperatureSelect(value[0] || temperature);
   };
 
   return (
-    <form className="space-y-5">
+    <form className="space-y-4" onSubmit={onSubmit}>
       <SelectItems
         label="Prompt"
         placeholder="Selecione um prompt..."
         array={prompts}
-        onSelect={onPromptSelect}
+        onSelect={handlePromptSelect}
       />
 
       <div className="space-y-2">
@@ -57,7 +74,7 @@ export const FormTranscription = () => {
           max={1}
           step={0.1}
           value={[temperature]}
-          onValueChange={(value) => setTemperature(value[0] as number)}
+          onValueChange={handleTemperatureSelect}
         >
           <Slider />
         </Slider>
@@ -70,7 +87,7 @@ export const FormTranscription = () => {
 
       <Separator />
 
-      <Button type="submit" className="w-full">
+      <Button disabled={isLoading} type="submit" className="w-full">
         Executar
         <Wand2 className="w-4 h-4 ml-2" />
       </Button>

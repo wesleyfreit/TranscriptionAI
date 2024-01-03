@@ -11,7 +11,11 @@ import { generateTranscription, uploadVideo } from '@/services/videos';
 import { convertMp3toMp4 } from '@/utils/convertMp3ToMp4';
 import { formVideoStatusMessages } from '@/utils/formVideoStatusMessages';
 
-export const FormVideo = () => {
+interface FormVideoProps {
+  onVideoUploaded: (videoId: string) => void;
+}
+
+export const FormVideo = ({ onVideoUploaded }: FormVideoProps) => {
   const [video, setVideo] = useState<File | undefined>();
   const [status, setStatus] = useState<Status>('waiting');
 
@@ -64,6 +68,8 @@ export const FormVideo = () => {
 
       if (generateResponse.status === 200) {
         setStatus('success');
+
+        onVideoUploaded(videoId);
       }
     } catch (error) {
       setStatus('error');
@@ -72,7 +78,7 @@ export const FormVideo = () => {
   };
 
   return (
-    <form className="space-y-5" onSubmit={handleSave}>
+    <form className="space-y-4" onSubmit={handleSave}>
       <label
         htmlFor="video"
         className="border flex rounded-md aspect-video cursor-pointer border-dashed text-sm flex-col gap-2 items-center justify-center text-muted-foreground duration-300 hover:bg-primary/5"

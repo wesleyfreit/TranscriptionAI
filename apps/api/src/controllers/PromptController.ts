@@ -1,4 +1,5 @@
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { OpenAIStream, streamToResponse } from 'ai';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { ZodError } from 'zod';
 
@@ -13,10 +14,12 @@ import { aiCompleteSchema } from '../schemas/aiCompleteSchema';
 export class PromptController {
   private prompt;
   private video;
+  private origin;
 
   constructor() {
     this.prompt = new Prompt();
     this.video = new Video();
+    this.origin = process.env.ORIGIN_URL;
   }
 
   findAll = async (request: FastifyRequest, reply: FastifyReply) => {
@@ -30,7 +33,7 @@ export class PromptController {
 
   generateAiComplete = async (request: FastifyRequest, reply: FastifyReply) => {
     try {
-      const { videoId, template, temperature } = aiCompleteSchema.parse(request.body);
+      const { videoId, prompt, temperature } = aiCompleteSchema.parse(request.body);
 
       const video = await this.video.findVideo(videoId);
 
@@ -38,7 +41,7 @@ export class PromptController {
         return reply.status(400).send({ error: 'Video transcription not found' });
       }
 
-      const promptMessage = template.replace('{transcription}', video.transcription);
+      const promptMessage = prompt.replace('{transcription}', video.transcription);
 
       const numOfTokens = numOfTokensFromString(promptMessage);
       const model = numOfTokens > 4096 ? 'gpt-3.5-turbo-16k' : 'gpt-3.5-turbo';
@@ -47,11 +50,17 @@ export class PromptController {
         model,
         temperature,
         messages: [{ role: 'user', content: promptMessage }],
+        stream: true,
       });
 
-      if (response.choices[0]) {
-        return response.choices[0].message.content;
-      } else return reply.status(400).send({ error: 'Failed to generate summary' });
+      const stream = OpenAIStream(response);
+
+      streamToResponse(stream, reply.raw, {
+        headers: {
+          'Access-Control-Allow-Origin': `${this.origin}`,
+          'Access-Control-Allow-Methods': 'POST',
+        },
+      });
     } catch (error) {
       if (error instanceof ZodError) {
         const validationError = getValidationError(error.errors);

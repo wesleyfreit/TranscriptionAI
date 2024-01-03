@@ -1,10 +1,30 @@
+'use client';
+import { useState } from 'react';
+
 import { FormTranscription } from '@/components/FormTranscription';
 import { FormVideo } from '@/components/FormVideo';
 import { Header } from '@/components/Header';
 import { Separator } from '@/components/ui/separator';
 import { Textarea } from '@/components/ui/textarea';
+import { aiCompleteLink } from '@/services/ai';
+import { useCompletion } from 'ai/react';
 
 export default function Home() {
+  const [videoId, setVideoId] = useState<string | null>(null);
+  const [temperature, setTemperature] = useState(0.5);
+
+  const { input, completion, setInput, handleInputChange, handleSubmit, isLoading } =
+    useCompletion({
+      api: aiCompleteLink,
+      body: {
+        videoId,
+        temperature,
+      },
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -15,12 +35,15 @@ export default function Home() {
             <Textarea
               placeholder="Inclua o prompt para a AI..."
               className="resize-none p-5 leading-relaxed"
+              value={input}
+              onChange={handleInputChange}
             />
 
             <Textarea
               placeholder="Resultado gerado pela IA..."
               readOnly
               className="resize-none p-5 leading-relaxed"
+              value={completion}
             />
           </div>
 
@@ -31,13 +54,19 @@ export default function Home() {
           </p>
         </div>
 
-        <aside className="transcription-menu w-96 my-5 me-5 mb-14 max-h-full overflow-y-auto relative">
-          <div className="absolute px-2 space-y-6">
-            <FormVideo />
+        <aside className="transcription-menu w-96 my-5 me-5 mb-5 max-h-full overflow-y-auto relative">
+          <div className="absolute px-2 space-y-4">
+            <FormVideo onVideoUploaded={setVideoId} />
 
             <Separator />
 
-            <FormTranscription />
+            <FormTranscription
+              temperature={temperature}
+              isLoading={isLoading}
+              onPromptSelect={setInput}
+              onTemperatureSelect={setTemperature}
+              onSubmit={handleSubmit}
+            />
           </div>
         </aside>
       </main>
