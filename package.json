@@ -10,10 +10,12 @@
   },
   "scripts": {
     "build": "turbo build",
-    "dev": "turbo dev",
-    "lint": "turbo lint",
+    "build:web": "turbo build --scope=web --include-dependencies --no-deps",
+    "build:api": "turbo build --scope=api --include-dependencies --no-deps",
     "clean": "turbo run clean",
+    "dev": "turbo dev",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "lint": "turbo lint",
     "lint-staged": "lint-staged",
     "prepare": "husky install"
   },
